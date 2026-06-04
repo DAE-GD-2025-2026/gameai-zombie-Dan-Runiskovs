@@ -33,3 +33,13 @@ public:
 	virtual FSteeringOutput CalculateSteering(float DeltaT, USteeringComponent_RuniskovsDan& Component) override;
 };
 
+class FFlee_RuniskovsDan final : public FSteeringBehaviorBase_RuniskovsDan
+{
+	public:
+	FFlee_RuniskovsDan() = default;
+	virtual  ~FFlee_RuniskovsDan() override = default;
+	
+	// Flee Behavior
+	virtual FSteeringOutput CalculateSteering(float DeltaT, USteeringComponent_RuniskovsDan& Component) override;
+};
+

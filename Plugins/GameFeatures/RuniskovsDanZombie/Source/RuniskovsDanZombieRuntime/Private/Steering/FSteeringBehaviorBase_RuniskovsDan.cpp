@@ -17,3 +17,15 @@ FSteeringOutput FSeek_RuniskovsDan::CalculateSteering(float DeltaT, USteeringCom
 	
 	return Steering;
 }
+
+FSteeringOutput FFlee_RuniskovsDan::CalculateSteering(float DeltaT, USteeringComponent_RuniskovsDan& Component)
+{
+	FSteeringOutput Steering{};
+	
+	Steering.LinearVelocity = -(Target - Component.GetOwner()->GetActorLocation());
+	
+	if (!Steering.LinearVelocity.IsNearlyZero())
+		Steering.LinearVelocity.Normalize();
+	
+	return Steering; 
+}

@@ -4,19 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "BTT_Seek_RuniskovsDan.generated.h"
+#include "BTT_Flee_RuniskovsDan.generated.h"
 
 class USteeringComponent_RuniskovsDan;
 class ASurvivorPawn;
-/*
- */
+
 UCLASS()
-class RUNISKOVSDANZOMBIERUNTIME_API UBTT_Seek_RuniskovsDan final: public UBTTask_BlackboardBase
+class RUNISKOVSDANZOMBIERUNTIME_API UBTT_Flee_RuniskovsDan : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 	
 public:
-	UBTT_Seek_RuniskovsDan() { bNotifyTick = true; NodeName = "Seek"; }
+	UBTT_Flee_RuniskovsDan() { bNotifyTick = true; NodeName = "Flee"; }
 	
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
