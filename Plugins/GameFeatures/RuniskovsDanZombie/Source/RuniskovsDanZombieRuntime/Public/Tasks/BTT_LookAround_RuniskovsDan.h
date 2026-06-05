@@ -21,11 +21,14 @@ public:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 private:
 	UPROPERTY(EditAnywhere)
-	float DegPerSec{ 160.f };
+	float DegPerSec{ 180.f };
+	
+	float AccumulatedYaw{ 0.f };
+	
 	UPROPERTY(EditAnywhere)
 	FBlackboardKeySelector ShouldLookAroundKey;
     
 	ASurvivorPawn* Survivalist{};
-	USteeringComponent_RuniskovsDan* SteeringComponent{};
-	//UHouseTrackerComponent_StukalovsAlex* HouseTrackerComponent{};
+	USteeringComponent_RuniskovsDan* Steering{};
+	UHouseTrackerComponent_RuniskovsDan* HouseTracker{};
 };

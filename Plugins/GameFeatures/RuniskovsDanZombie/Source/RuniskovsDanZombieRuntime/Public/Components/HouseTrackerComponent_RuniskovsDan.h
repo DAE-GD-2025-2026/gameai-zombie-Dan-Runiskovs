@@ -19,6 +19,8 @@ public:
 	bool IsHouseVisited(const AHouse&) const noexcept;
 	void SetHouseVisited(AHouse& House) noexcept;
 	
+	void MarkCurrentHouse() noexcept;
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -31,5 +33,4 @@ public:
 
 	void CollectHouses() noexcept;
 	AHouse* GetCurrentHouse() noexcept;
-	void MarkCurrentHouse() noexcept;
 };
