@@ -4,7 +4,8 @@
 #include "Tasks/BTT_Flee_RuniskovsDan.h"
 #include "Utils_RuniskovsDan.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Steering/SteeringComponent_RuniskovsDan.h"
+#include "Survivor/SurvivorPawn.h"
+#include "Components/SteeringComponent_RuniskovsDan.h"
 
 EBTNodeResult::Type UBTT_Flee_RuniskovsDan::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {

@@ -45,5 +45,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	float m_AngularVelocity;
 	
-	ASurvivorPawn* m_pSurvivorPawn{};
+	ASurvivorPawn* m_pSurvivorPawn{}; // Not owning pointer
 };

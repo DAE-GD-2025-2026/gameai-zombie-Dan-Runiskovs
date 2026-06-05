@@ -5,7 +5,8 @@
 
 #include "Utils_RuniskovsDan.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Steering/SteeringComponent_RuniskovsDan.h"
+#include "Survivor/SurvivorPawn.h"
+#include "Components/SteeringComponent_RuniskovsDan.h"
 
 
 EBTNodeResult::Type UBTT_Seek_RuniskovsDan::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
