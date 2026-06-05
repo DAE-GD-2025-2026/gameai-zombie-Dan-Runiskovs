@@ -11,11 +11,11 @@ USteeringComponent_RuniskovsDan::USteeringComponent_RuniskovsDan()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	m_behaviorMap.emplace(typeid(FSeek_RuniskovsDan), std::make_unique<FSeek_RuniskovsDan>());
-	m_behaviorMap.emplace(typeid(FFlee_RuniskovsDan), std::make_unique<FFlee_RuniskovsDan>());
-	m_behaviorMap.emplace(typeid(FWander_RuniskovsDan), std::make_unique<FWander_RuniskovsDan>());
+	BehaviorMap.emplace(typeid(FSeek_RuniskovsDan), std::make_unique<FSeek_RuniskovsDan>());
+	BehaviorMap.emplace(typeid(FFlee_RuniskovsDan), std::make_unique<FFlee_RuniskovsDan>());
+	BehaviorMap.emplace(typeid(FWander_RuniskovsDan), std::make_unique<FWander_RuniskovsDan>());
 
-	m_pCurrentBehavior = m_behaviorMap.at(typeid(FWander_RuniskovsDan)).get();
+	CurrentBehavior = BehaviorMap.at(typeid(FWander_RuniskovsDan)).get();
 }
 
 
@@ -24,7 +24,7 @@ void USteeringComponent_RuniskovsDan::BeginPlay()
 {
 	Super::BeginPlay();
 
-	m_pSurvivorPawn = CastChecked<ASurvivorPawn>(GetOwner());
+	Survivalist = CastChecked<ASurvivorPawn>(GetOwner());
 }
 
 
@@ -33,23 +33,37 @@ void USteeringComponent_RuniskovsDan::TickComponent(float DeltaTime, ELevelTick 
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	const auto linearVelocity = m_pCurrentBehavior->CalculateSteering(DeltaTime, *this);
+	const auto linearVelocity = CurrentBehavior->CalculateSteering(DeltaTime, *this);
 	FVector velocity{ linearVelocity.LinearVelocity.X, linearVelocity.LinearVelocity.Y, 0};
 	
-	m_pSurvivorPawn->AddMovementInput(velocity);
+	Survivalist->AddMovementInput(velocity);
 	
 	const FVector moveDir{ velocity };
-	m_pSurvivorPawn->SetActorRotation(moveDir.Rotation());
+	Survivalist->SetActorRotation(moveDir.Rotation());
 }
 
-void USteeringComponent_RuniskovsDan::SetTarget(FVector const& target) const
+void USteeringComponent_RuniskovsDan::SetTarget(const FVector& Target) const
 {
-	FVector2D Target2D{ target.X, target.Y };
-	m_pCurrentBehavior->SetTarget(Target2D);
+	FVector2D Target2D{ Target.X, Target.Y };
+	CurrentBehavior->SetTarget(Target2D);
 }
 
 FVector USteeringComponent_RuniskovsDan::GetOwnerLocation() const noexcept
 {
-	return m_pSurvivorPawn->GetActorLocation();
+	return Survivalist->GetActorLocation();
+}
+
+void USteeringComponent_RuniskovsDan::FaceTarget() const
+{
+	const auto Target{ CurrentBehavior->GetTarget() };
+    
+	// Get current positions
+	const auto CurrentLocation{ Survivalist->GetActorLocation()};
+	const FVector TargetLocation{ Target.X, Target.Y, CurrentLocation.Z };
+    
+	// Calculate rotation to look at target
+	const FRotator NewRotation{ (TargetLocation - CurrentLocation).Rotation() };
+    
+	Survivalist->SetActorRotation(NewRotation);
 }
 

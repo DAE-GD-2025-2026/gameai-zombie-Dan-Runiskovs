@@ -8,6 +8,7 @@
 
 class ASurvivorPawn;
 class USteeringComponent_RuniskovsDan;
+class UHouseTrackerComponent_RuniskovsDan;
 
 UCLASS()
 class RUNISKOVSDANZOMBIERUNTIME_API UBTT_LookAround_RuniskovsDan : public UBTTask_BlackboardBase

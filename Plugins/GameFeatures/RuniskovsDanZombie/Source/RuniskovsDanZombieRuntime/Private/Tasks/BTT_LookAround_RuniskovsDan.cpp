@@ -38,8 +38,8 @@ void UBTT_LookAround_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, u
 
 	AccumulatedYaw += Step;
 
-	const float CurrentYaw{ Survivalist->GetActorRotation().Yaw };
-	const float NewYaw{ CurrentYaw + Step };
+	const auto CurrentYaw{ static_cast<float>(Survivalist->GetActorRotation().Yaw) };
+	const auto NewYaw{ CurrentYaw + Step };
 
 	Survivalist->SetActorRotation(FRotator{ 0.f, NewYaw, 0.f });
 

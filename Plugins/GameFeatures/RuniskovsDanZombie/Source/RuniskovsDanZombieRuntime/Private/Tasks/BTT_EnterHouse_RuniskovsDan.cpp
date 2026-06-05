@@ -28,7 +28,7 @@ EBTNodeResult::Type UBTT_EnterHouse_RuniskovsDan::ExecuteTask(UBehaviorTreeCompo
 	verify(House);
 	
 	// --- Skip if inside ---
-	const auto Location{Survivalist->GetActorLocation().X, Survivalist->GetActorLocation().Y};
+	const FVector2D Location{Survivalist->GetActorLocation().X, Survivalist->GetActorLocation().Y};
 	if (MyBTTUtils_RuniskovsDan::IsPointInHouse(Location, House->GetBounds())) return EBTNodeResult::Failed;
 	
 	// --- Skip House if visited ---

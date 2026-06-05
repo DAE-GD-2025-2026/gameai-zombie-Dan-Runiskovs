@@ -19,6 +19,7 @@ public:
 	virtual FSteeringOutput CalculateSteering(float DeltaT, USteeringComponent_RuniskovsDan& Component) = 0;
 
 	void SetTarget(const FTargetData& NewTarget) { Target = NewTarget; }
+	FVector2D GetTarget() const noexcept { return Target; }
 	
 	template<class T, std::enable_if_t<std::is_base_of_v<FSteeringBehaviorBase_RuniskovsDan, T>>* = nullptr>
 	T* As() noexcept { return static_cast<T*>(this); }

@@ -4,6 +4,8 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Components/SteeringComponent_RuniskovsDan.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Common/InventoryComponent.h"
+#include "Items/BaseItem.h"
 
 namespace MyBTTUtils_RuniskovsDan
 {
@@ -48,5 +50,13 @@ namespace MyBTTUtils_RuniskovsDan
 		auto* BlackboardComponent{ OwnerComp.GetBlackboardComponent() };
 		verify(BlackboardComponent);
 		return *BlackboardComponent;
+	}
+
+	TArray<ABaseItem*> GetInventory(const ASurvivorPawn& Survivalist) noexcept
+	{
+		auto* InventoryComponent{ Survivalist.FindComponentByClass<UInventoryComponent>() };
+		verify(InventoryComponent);
+		
+		return InventoryComponent->GetInventory();
 	}
 }

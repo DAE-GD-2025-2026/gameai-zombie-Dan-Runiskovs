@@ -1,14 +1,15 @@
 ﻿#pragma once
 #include "AIController.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Steering/FSteeringBehaviorBase_RuniskovsDan.h"
 #include "Village/House/House.h"
 
 
 class USteeringComponent_RuniskovsDan;
-class UBehaviorTreeComponent;
-class UBlackboardComponent;
 class ASurvivorPawn;
 class AHouse;
+class ABaseItem;
 
 namespace MyBTTUtils_RuniskovsDan
 {
@@ -24,4 +25,17 @@ namespace MyBTTUtils_RuniskovsDan
 	
 	// --- Blackboard ---
 	UBlackboardComponent& GetBlackboard(UBehaviorTreeComponent& OwnerComp) noexcept;
+	template <typename ObjectType>
+	ObjectType* GetBlackboardObject(UBehaviorTreeComponent& OwnerComp, const FName& BlackboardKeyName) noexcept
+	{
+		const auto* BlackboardComponent{ OwnerComp.GetBlackboardComponent() };
+		verify(BlackboardComponent);
+		
+		auto* Object{ Cast<ObjectType>(BlackboardComponent->GetValueAsObject(BlackboardKeyName)) };
+		
+		return Object;
+	}
+	
+	// --- Inventory ---
+	TArray<ABaseItem*> GetInventory(const ASurvivorPawn& Survivalist) noexcept;
 }

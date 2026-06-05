@@ -26,24 +26,22 @@ public:
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	template<typename BehaviorType> requires std::derived_from<BehaviorType, FSteeringBehaviorBase_RuniskovsDan>
-	void SetBehavior() noexcept
-	{
-		m_pCurrentBehavior = m_behaviorMap.at(typeid(BehaviorType)).get();
-	}
+	void SetBehavior() noexcept { CurrentBehavior = BehaviorMap.at(typeid(BehaviorType)).get(); }
 	
 	void SetTarget(FVector const&) const;
 	FVector GetOwnerLocation() const noexcept;
+	void FaceTarget() const;
 	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
-	std::unordered_map<std::type_index, std::unique_ptr<FSteeringBehaviorBase_RuniskovsDan>> m_behaviorMap{};
-	FSteeringBehaviorBase_RuniskovsDan* m_pCurrentBehavior;
+	std::unordered_map<std::type_index, std::unique_ptr<FSteeringBehaviorBase_RuniskovsDan>> BehaviorMap{};
+	FSteeringBehaviorBase_RuniskovsDan* CurrentBehavior;
 	
 	UPROPERTY(VisibleAnywhere)
-	float m_AngularVelocity;
+	float AngularVelocity;
 	
-	ASurvivorPawn* m_pSurvivorPawn{}; // Not owning pointer
+	ASurvivorPawn* Survivalist{}; // Not owning pointer
 };
