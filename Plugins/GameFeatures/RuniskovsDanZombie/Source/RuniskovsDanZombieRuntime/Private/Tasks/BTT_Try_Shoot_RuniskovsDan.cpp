@@ -15,7 +15,7 @@
 EBTNodeResult::Type UBTT_Try_Shoot_RuniskovsDan::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {	
 	// --- Get current zombie target ---
-	Zombie = MyBTTUtils_RuniskovsDan::GetBlackboardObject<ABaseZombie>(OwnerComp, TEXT("Zombie"));
+	Zombie = MyBTTUtils_RuniskovsDan::GetFromBlackboard<ABaseZombie>(OwnerComp, TEXT("Zombie"));
 	verify(Zombie)
 	ZombieHealthComponent = Zombie->GetComponentByClass<UHealthComponent>();
 	verify(ZombieHealthComponent);

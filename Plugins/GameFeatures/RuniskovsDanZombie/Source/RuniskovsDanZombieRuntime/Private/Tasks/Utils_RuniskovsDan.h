@@ -26,7 +26,7 @@ namespace MyBTTUtils_RuniskovsDan
 	// --- Blackboard ---
 	UBlackboardComponent& GetBlackboard(UBehaviorTreeComponent& OwnerComp) noexcept;
 	template <typename ObjectType>
-	ObjectType* GetBlackboardObject(UBehaviorTreeComponent& OwnerComp, const FName& BlackboardKeyName) noexcept
+	ObjectType* GetFromBlackboard(UBehaviorTreeComponent& OwnerComp, const FName& BlackboardKeyName) noexcept
 	{
 		const auto* BlackboardComponent{ OwnerComp.GetBlackboardComponent() };
 		verify(BlackboardComponent);
