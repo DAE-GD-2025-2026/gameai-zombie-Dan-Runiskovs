@@ -49,6 +49,18 @@ EBTNodeResult::Type UBTT_EnterHouse_RuniskovsDan::ExecuteTask(UBehaviorTreeCompo
 	// --- Calculate path ---
 	const auto Path{ Survivalist->CalculatePath(HouseCenter) };
 	
+	UE_LOG(LogTemp, Warning,
+		TEXT("ENTER HOUSE: Path Size = %d"),
+		Path.Num());
+
+	for (int32 i{}; i < Path.Num(); ++i)
+	{
+		UE_LOG(LogTemp, Warning,
+			TEXT("Waypoint %d : %s"),
+			i,
+			*Path[i].ToString());
+	}
+	
 	// --- Save Path data ---
 	auto* Memory{ reinterpret_cast<FNodeMemory*>(NodeMemory) };
 	Memory->Path = Path;
@@ -62,18 +74,36 @@ void UBTT_EnterHouse_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, u
 {
 	// Finishing if the entire path was consumed
 	auto* Memory = reinterpret_cast<FNodeMemory*>(NodeMemory);
+	UE_LOG(LogTemp, Warning,
+		TEXT("CurrentIdx = %d / %d"),
+		Memory->CurrentPointIdx,
+		Memory->Path.Num());
+	
 	if (Memory->CurrentPointIdx >= static_cast<uint32_t>(Memory->Path.Num()))
 	{
+		UE_LOG(LogTemp, Warning,
+			TEXT("Finished EnterHouse"));
+		
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
 	// Saving the current waypoint data
 	const auto& CurrentWaypoint{ Memory->Path[Memory->CurrentPointIdx] };
+	const float Distance =
+		(CurrentWaypoint - Survivalist->GetActorLocation()).Size();
 
+	UE_LOG(LogTemp, Warning,
+		TEXT("Distance To Waypoint = %.2f"),
+		Distance);
+	
 	// Advancing to the next waypoint if the current one is reached
-	constexpr auto KindaThereSq{ 400.f }; // 20*20
+	constexpr auto KindaThereSq{ 35.f * 35.f }; // 20*20
 	if ((CurrentWaypoint - Survivalist->GetActorLocation()).SizeSquared() <= KindaThereSq)
 	{
+		UE_LOG(LogTemp, Warning,
+		TEXT("Reached Waypoint %d"),
+		Memory->CurrentPointIdx);
+		
 		++Memory->CurrentPointIdx;
 	}
 	else
