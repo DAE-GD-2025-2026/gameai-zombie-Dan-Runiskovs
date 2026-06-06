@@ -13,6 +13,7 @@ USteeringComponent_RuniskovsDan::USteeringComponent_RuniskovsDan()
 
 	BehaviorMap.emplace(typeid(FSeek_RuniskovsDan), std::make_unique<FSeek_RuniskovsDan>());
 	BehaviorMap.emplace(typeid(FFlee_RuniskovsDan), std::make_unique<FFlee_RuniskovsDan>());
+	BehaviorMap.emplace(typeid(FLookAt_RuniskovsDan), std::make_unique<FLookAt_RuniskovsDan>());
 	BehaviorMap.emplace(typeid(FWander_RuniskovsDan), std::make_unique<FWander_RuniskovsDan>());
 
 	CurrentBehavior = BehaviorMap.at(typeid(FWander_RuniskovsDan)).get();

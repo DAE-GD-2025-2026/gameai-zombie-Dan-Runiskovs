@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Tasks/BTT_Try_Shoot_RuniskovsDan.h"
+#include "Tasks/BTT_TryShoot_RuniskovsDan.h"
 
 #include "Tasks/Utils_RuniskovsDan.h"
 #include "Items/Pistol.h"
@@ -12,7 +12,7 @@
 #include "Zombies/BaseZombie.h"
 #include "Survivor/SurvivorPawn.h"
 
-EBTNodeResult::Type UBTT_Try_Shoot_RuniskovsDan::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTT_TryShoot_RuniskovsDan::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {	
 	// --- Get current zombie target ---
 	Zombie = MyBTTUtils_RuniskovsDan::GetFromBlackboard<ABaseZombie>(OwnerComp, TEXT("Zombie"));
@@ -42,8 +42,7 @@ EBTNodeResult::Type UBTT_Try_Shoot_RuniskovsDan::ExecuteTask(UBehaviorTreeCompon
 	GetWeapon(OwnerComp);
 	
 	Shoot();
-
-	// Removing the zombie from the detection, so it gets re-detected
+	
 	UBlackboardComponent& BlackboardComponent{ MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp) };
 	BlackboardComponent.SetValueAsObject(ZombieKey.SelectedKeyName, nullptr);
 	
@@ -52,7 +51,7 @@ EBTNodeResult::Type UBTT_Try_Shoot_RuniskovsDan::ExecuteTask(UBehaviorTreeCompon
 	return EBTNodeResult::Succeeded;
 }
 
-bool UBTT_Try_Shoot_RuniskovsDan::TryGetAnyGun()
+bool UBTT_TryShoot_RuniskovsDan::TryGetAnyGun()
 {
 	Shotgun = nullptr;
 	Pistol = nullptr;
@@ -73,7 +72,7 @@ bool UBTT_Try_Shoot_RuniskovsDan::TryGetAnyGun()
 	return Pistol or Shotgun;
 }
 
-void UBTT_Try_Shoot_RuniskovsDan::GetWeapon(UBehaviorTreeComponent& OwnerComp) noexcept
+void UBTT_TryShoot_RuniskovsDan::GetWeapon(UBehaviorTreeComponent& OwnerComp) noexcept
 {
 	// --- Face The zombie ---
 	auto DirToZombie{ Zombie->GetActorLocation() - Survivalist->GetActorLocation() };
@@ -101,7 +100,7 @@ void UBTT_Try_Shoot_RuniskovsDan::GetWeapon(UBehaviorTreeComponent& OwnerComp) n
 	
 }
 
-void UBTT_Try_Shoot_RuniskovsDan::Shoot() const noexcept
+void UBTT_TryShoot_RuniskovsDan::Shoot() const noexcept
 {
 	CurrentGun->UseItem(*Survivalist);
 }

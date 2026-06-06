@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "BTT_Try_Shoot_RuniskovsDan.generated.h"
+#include "BTT_TryShoot_RuniskovsDan.generated.h"
 
 class ASurvivorPawn;
 class ABaseZombie;
@@ -16,11 +16,11 @@ class AShotgun;
 class APistol;
 
 UCLASS()
-class RUNISKOVSDANZOMBIERUNTIME_API UBTT_Try_Shoot_RuniskovsDan : public UBTTask_BlackboardBase
+class RUNISKOVSDANZOMBIERUNTIME_API UBTT_TryShoot_RuniskovsDan : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 public:
-	UBTT_Try_Shoot_RuniskovsDan() {bNotifyTick = false; NodeName = "Try Shoot";}
+	UBTT_TryShoot_RuniskovsDan() {bNotifyTick = false; NodeName = "Try Shoot";}
 	
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 

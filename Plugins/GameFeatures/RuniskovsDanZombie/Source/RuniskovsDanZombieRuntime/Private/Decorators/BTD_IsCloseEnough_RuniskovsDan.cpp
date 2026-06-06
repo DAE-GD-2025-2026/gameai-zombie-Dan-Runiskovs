@@ -9,16 +9,20 @@
 bool UBTD_IsCloseEnough_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
 	const auto* Survivalist = MyBTTUtils_RuniskovsDan::GetSurvivorPawn(OwnerComp);
-	verify(Survivalist);
+	if (!Survivalist) return false;
 
 	const auto* BlackboardComponent{ OwnerComp.GetBlackboardComponent() };
-	verify(BlackboardComponent);
-	
-	auto* TargetObject{ BlackboardComponent->GetValueAsObject(TargetKey.SelectedKeyName) };
-	const auto* TargetActor{ CastChecked<AActor>(TargetObject) };
-	
-	const double MaxDstSquared{  MaxDistance * MaxDistance };
-	const double DstSquared{ (TargetActor->GetActorLocation() - Survivalist->GetActorLocation()).SizeSquared()};
-	
+	if (!BlackboardComponent) return false;
+
+	UObject* TargetObject{ BlackboardComponent->GetValueAsObject(TargetKey.SelectedKeyName) };
+	const AActor* TargetActor{ Cast<AActor>(TargetObject) };
+
+	if (!TargetActor) return false;
+
+	const double MaxDstSquared{ MaxDistance * MaxDistance };
+	const double DstSquared{
+		(TargetActor->GetActorLocation() - Survivalist->GetActorLocation()).SizeSquared()
+	};
+
 	return DstSquared < MaxDstSquared;
 }
