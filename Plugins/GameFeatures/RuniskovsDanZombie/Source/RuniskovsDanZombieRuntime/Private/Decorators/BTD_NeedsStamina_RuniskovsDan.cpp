@@ -9,15 +9,15 @@
 
 bool UBTD_NeedsStamina_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
+	// --- The classics ---
 	const auto* Survivalist = MyBTTUtils_RuniskovsDan::GetSurvivorPawn(OwnerComp);
 	verify(Survivalist);
 	
 	const auto* StaminaComponent{ Survivalist->GetComponentByClass<UStaminaComponent>() };
 	verify(StaminaComponent);
 	
-	const float StaminaPercent =
-		StaminaComponent->GetCurrentStamina() /
-		StaminaComponent->GetMaxStamina();
+	// --- No brute force here ---
+	const float StaminaPercent{ StaminaComponent->GetCurrentStamina() / StaminaComponent->GetMaxStamina() };
 
-	return StaminaPercent <= 0.5f;
+	return StaminaPercent <= EatAtPercent;
 }

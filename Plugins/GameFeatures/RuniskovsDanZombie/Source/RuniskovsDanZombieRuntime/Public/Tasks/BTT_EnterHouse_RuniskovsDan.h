@@ -10,6 +10,12 @@ class UHouseTrackerComponent_RuniskovsDan;
 class AHouse;
 class ASurvivorPawn;
 
+struct FNodeMemory final
+{
+	TArray<FVector> Path;
+	uint32_t CurrentPointIdx{};
+};
+
 UCLASS()
 class RUNISKOVSDANZOMBIERUNTIME_API UBTT_EnterHouse_RuniskovsDan : public UBTTask_BlackboardBase
 {
@@ -21,11 +27,11 @@ public:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 	virtual EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
-	virtual uint16 GetInstanceMemorySize() const override;
+	virtual uint16 GetInstanceMemorySize() const override { return sizeof(FNodeMemory); };
 	
 private:
 	UPROPERTY(EditAnywhere)
-	float WaypointAcceptanceRadius{ 50.f };
+	float KindaThereRadius{ 35.f };
 	UPROPERTY(EditAnywhere)
 	FBlackboardKeySelector ShouldLookAroundKey;
 	UPROPERTY(EditAnywhere)

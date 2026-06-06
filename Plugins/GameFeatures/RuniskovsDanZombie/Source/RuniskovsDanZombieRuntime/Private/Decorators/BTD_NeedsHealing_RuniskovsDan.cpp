@@ -8,15 +8,15 @@
 
 bool UBTD_NeedsHealing_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
+	// --- You already know ---
 	const auto* Survivalist = MyBTTUtils_RuniskovsDan::GetSurvivorPawn(OwnerComp);
 	verify(Survivalist);
 	
 	const auto* HealthComponent{ Survivalist->GetComponentByClass<UHealthComponent>() };
 	verify(HealthComponent);
 	
-	const float HealthPercent =
-		HealthComponent->GetHealth() /
-		HealthComponent->GetMaxHealth();
+	// --- Brute force health percent ---
+	const float HealthPercent{ static_cast<float>(HealthComponent->GetHealth() / HealthComponent->GetMaxHealth()) };
 
-	return HealthPercent <= 0.5f;
+	return HealthPercent <= HealAtPercent;
 }

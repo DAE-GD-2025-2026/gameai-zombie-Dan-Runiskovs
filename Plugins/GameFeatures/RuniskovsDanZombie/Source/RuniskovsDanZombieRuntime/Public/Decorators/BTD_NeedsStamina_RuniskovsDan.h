@@ -14,4 +14,7 @@ public:
 	UBTD_NeedsStamina_RuniskovsDan() { NodeName = "Needs Stamina"; }
 	
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
+	
+	UPROPERTY(EditAnywhere)
+	float EatAtPercent{ 0.3 };
 };

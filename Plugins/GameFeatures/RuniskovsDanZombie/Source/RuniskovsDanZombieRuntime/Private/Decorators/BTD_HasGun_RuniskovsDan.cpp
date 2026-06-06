@@ -10,17 +10,17 @@
 
 bool UBTD_HasGun_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
+	// --- Get Survivalist ---
 	const auto* Survivalist = MyBTTUtils_RuniskovsDan::GetSurvivorPawn(OwnerComp);
+	verify(Survivalist);
 
-	if (!Survivalist) return false;
-
+	// --- Get Inventory ---
 	const auto* Inventory{ Survivalist->GetComponentByClass<UInventoryManager_RuniskovsDan>() };
-
-	if (!Inventory) return false;
+	verify(Inventory);
 	
-	const bool HasPistol{ Inventory->GetItemsByType<APistol>().Num() > 0 };
-
-	const bool HasShotgun{ Inventory->GetItemsByType<AShotgun>().Num() > 0 };
+	// --- Perform Checks ---
+	const bool HasPistol{ Inventory->TryGetItemsByType<APistol>().Num() > 0 };
+	const bool HasShotgun{ Inventory->TryGetItemsByType<AShotgun>().Num() > 0 };
 
 	return HasPistol || HasShotgun;
 }

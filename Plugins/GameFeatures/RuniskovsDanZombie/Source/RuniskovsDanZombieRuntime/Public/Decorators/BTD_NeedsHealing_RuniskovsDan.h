@@ -13,4 +13,7 @@ class RUNISKOVSDANZOMBIERUNTIME_API UBTD_NeedsHealing_RuniskovsDan : public UBTD
 public:
 	UBTD_NeedsHealing_RuniskovsDan() {NodeName = "Needs Healing";}
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
+	
+	UPROPERTY(EditAnywhere)
+	float HealAtPercent{ 0.5f };
 };

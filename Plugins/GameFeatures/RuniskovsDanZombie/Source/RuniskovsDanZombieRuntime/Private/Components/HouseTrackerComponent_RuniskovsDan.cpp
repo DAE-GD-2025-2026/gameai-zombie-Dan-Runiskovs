@@ -57,12 +57,13 @@ void UHouseTrackerComponent_RuniskovsDan::SetHouseVisited(AHouse& House) noexcep
 
 AHouse* UHouseTrackerComponent_RuniskovsDan::GetCurrentHouse() noexcept
 {
-	// --- Get Survivalist position ---
 	if (!GetOwner()) return nullptr;
-	const FVector OwnerLocation = GetOwner()->GetActorLocation();
+	
+	// --- Get Survivalist position ---
+	const auto OwnerLocation = GetOwner()->GetActorLocation();
     
 	// --- Check in bounds of each house ---
-	for (AHouse* House : ArrHouses)
+	for (auto* House : ArrHouses)
 	{
 		if (!IsValid(House)) continue;
 
@@ -77,7 +78,7 @@ AHouse* UHouseTrackerComponent_RuniskovsDan::GetCurrentHouse() noexcept
 void UHouseTrackerComponent_RuniskovsDan::MarkCurrentHouse() noexcept
 {
 	// --- Try get current house ---
-	AHouse* const House{ GetCurrentHouse() };
+	auto* House{ GetCurrentHouse() };
 	if (!House) return;
 	
 	SetHouseVisited(*House);

@@ -25,8 +25,8 @@ public:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 private:
-	// Shotgun damage: 2 per pallet
-	// Pistol damage: 5
+	// --- Shotgun damage: 2 per pallet ---
+	// --- Pistol damage: 5 ---
 
 	UPROPERTY(EditAnywhere)
 	FBlackboardKeySelector ZombieKey;

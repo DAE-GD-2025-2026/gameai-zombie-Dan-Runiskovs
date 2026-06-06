@@ -6,16 +6,15 @@
 FSteeringOutput FSeek_RuniskovsDan::CalculateSteering(float DeltaT, USteeringComponent_RuniskovsDan& Component)
 {
 	FSteeringOutput Steering{};
-	constexpr float CloseDstSquared{25.f};
-	
+
 	// --- Get Actor Position ---
-	const FVector2D Postion{ MyBTTUtils_RuniskovsDan::GetSurvivalistLocation(Component) };
+	const auto Position{ MyBTTUtils_RuniskovsDan::GetSurvivalistLocation(Component) };
 	
 	// --- Calculate Linear Velocity ---
-	Steering.LinearVelocity = Target - Postion;
+	Steering.LinearVelocity = Target - Position;
 	
 	// --- Too close? ---
-	if (Steering.LinearVelocity.SquaredLength() <= CloseDstSquared)
+	if (constexpr auto CloseDstSquared{25.f}; Steering.LinearVelocity.SquaredLength() <= CloseDstSquared)
 		Steering.LinearVelocity = FVector2D::ZeroVector;	
 	
 	// --- Weird case protection ---
@@ -30,10 +29,10 @@ FSteeringOutput FFlee_RuniskovsDan::CalculateSteering(float DeltaT, USteeringCom
 	FSteeringOutput Steering{};
 	
 	// --- Get Actor Position ---
-	const FVector2D Postion{ MyBTTUtils_RuniskovsDan::GetSurvivalistLocation(Component) };
+	const auto Position{ MyBTTUtils_RuniskovsDan::GetSurvivalistLocation(Component) };
 	
 	// --- Calculate Linear Velocity ---
-	Steering.LinearVelocity = -(Target - Postion);
+	Steering.LinearVelocity = -(Target - Position);
 	
 	// --- Weird case protection ---
 	if (!Steering.LinearVelocity.IsNearlyZero())
@@ -51,16 +50,16 @@ FSteeringOutput FWander_RuniskovsDan::CalculateSteering(float DeltaT, USteeringC
 	NewAngleDeg = FMath::Fmod(FMath::Fmod(NewAngleDeg, 360.0f) + 360.0f, 360.0f);
 	
 	// --- Get Forward ---
-	AActor* Survivalist{ Component.GetOwner() };
+	const auto* Survivalist{ Component.GetOwner() };
 	verify(Survivalist);
-	FVector2D const ForwardVector{ Survivalist->GetActorForwardVector().X , Survivalist->GetActorForwardVector().Y };
+	const FVector2D ForwardVector{ Survivalist->GetActorForwardVector().X , Survivalist->GetActorForwardVector().Y };
 
 	// --- Save the angle --- 
 	LastAngleDeg = NewAngleDeg;
 	
 	// --- Set new target ---
-	FVector const AgentLocation{ Survivalist->GetActorLocation() };
-	FVector2D const NewTargetLocation{ 
+	const auto AgentLocation{ Survivalist->GetActorLocation() };
+	const FVector2D NewTargetLocation{ 
 		FVector2D{AgentLocation.X, AgentLocation.Y} + TargetCircleOffset  * ForwardVector 
 		+ TargetCircleRadius * FVector2D(
 			FMath::Cos(FMath::DegreesToRadians(NewAngleDeg)), 
@@ -80,10 +79,10 @@ FSteeringOutput FLookAt_RuniskovsDan::CalculateSteering(float DeltaT, USteeringC
 	FSteeringOutput Steering{};
 	
 	// --- Get Actor Position ---
-	const FVector2D Postion{ MyBTTUtils_RuniskovsDan::GetSurvivalistLocation(Component) };
+	const auto Position{ MyBTTUtils_RuniskovsDan::GetSurvivalistLocation(Component) };
 	
 	// --- Calculate Direction ---
-	Steering.LinearVelocity = -(Target - Postion);
+	Steering.LinearVelocity = -(Target - Position);
 	
 	return Steering;
 }

@@ -20,7 +20,7 @@ namespace MyBTTUtils_RuniskovsDan
 	FVector2D GetSurvivalistLocation(const USteeringComponent_RuniskovsDan& SteeringComp) noexcept;
 	
 	// --- House box getter ---
-	FBox GetHouseBounds(AHouse* House) noexcept;
+	FBox GetHouseBounds(const AHouse* House) noexcept;
 	bool IsPointInHouse(FVector2D Location, const FHouseBounds& Bounds) noexcept;
 	
 	// --- Blackboard ---

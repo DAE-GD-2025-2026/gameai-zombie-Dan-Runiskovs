@@ -3,7 +3,7 @@
 
 #include "Tasks/BTT_TryLoot_RuniskovsDan.h"
 
-#include "Utils_RuniskovsDan.h"
+#include "Tasks/Utils_RuniskovsDan.h"
 #include "Components/InventoryManager_RuniskovsDan.h"
 #include "Components/SteeringComponent_RuniskovsDan.h"
 #include "Survivor/SurvivorPawn.h"
@@ -68,7 +68,6 @@ void UBTT_TryLoot_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, uint
 		ItemsToLoot.Pop();
 		
 		auto& Blackboard = MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp);
-
 		Blackboard.SetValueAsBool(ShouldLookAroundKey.SelectedKeyName,true);
 		
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
@@ -91,8 +90,8 @@ bool UBTT_TryLoot_RuniskovsDan::TryUseItem(ABaseItem& Item, UBehaviorTreeCompone
 			verify(StaminaComponent);
 		
 			const auto FoodValue{ Item.GetValue() };
-			const auto StaminaDiff{ StaminaComponent->GetMaxStamina() - StaminaComponent->GetCurrentStamina() };
-			if (FoodValue <= StaminaDiff)
+			if (const auto StaminaDiff{ StaminaComponent->GetMaxStamina() - StaminaComponent->GetCurrentStamina() };
+				FoodValue <= StaminaDiff)
 			{
 				Item.UseItem(*Survivalist);
 				UnsetBlackboardItem(OwnerComp);
@@ -108,8 +107,8 @@ bool UBTT_TryLoot_RuniskovsDan::TryUseItem(ABaseItem& Item, UBehaviorTreeCompone
 			verify(HealthComponent);
 		
 			const auto HealthValue{ Item.GetValue() };
-			const auto HealthDiff{  HealthComponent->GetMaxHealth() - HealthComponent->GetHealth() };
-			if (HealthValue <= HealthDiff)
+			if (const auto HealthDiff{  HealthComponent->GetMaxHealth() - HealthComponent->GetHealth() };
+				HealthValue <= HealthDiff)
 			{
 				Item.UseItem(*Survivalist);
 				UnsetBlackboardItem(OwnerComp);

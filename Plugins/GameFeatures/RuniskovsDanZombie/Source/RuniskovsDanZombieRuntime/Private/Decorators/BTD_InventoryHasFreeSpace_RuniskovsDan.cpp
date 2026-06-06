@@ -9,12 +9,11 @@
 
 bool UBTD_InventoryHasFreeSpace_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
+	// --- Guess :) ---
 	const auto* Survivalist = MyBTTUtils_RuniskovsDan::GetSurvivorPawn(OwnerComp);
 	verify(Survivalist);
 
-	const auto* BlackboardComponent{ OwnerComp.GetBlackboardComponent() };
-	verify(BlackboardComponent);
-
+	// --- Guess again :D ---
 	const auto* InventoryManager{ Survivalist->GetComponentByClass<UInventoryManager_RuniskovsDan>() };
 	verify(InventoryManager);
 	

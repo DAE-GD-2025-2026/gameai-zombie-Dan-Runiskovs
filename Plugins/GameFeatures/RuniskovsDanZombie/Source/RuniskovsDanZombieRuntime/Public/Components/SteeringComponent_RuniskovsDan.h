@@ -22,8 +22,7 @@ public:
 	// Sets default values for this component's properties
 	USteeringComponent_RuniskovsDan();
 	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,FActorComponentTickFunction* ThisTickFunction) override;
 
 	template<typename BehaviorType> requires std::derived_from<BehaviorType, FSteeringBehaviorBase_RuniskovsDan>
 	void SetBehavior() noexcept { CurrentBehavior = BehaviorMap.at(typeid(BehaviorType)).get(); }
@@ -33,12 +32,11 @@ public:
 	void FaceTarget() const;
 	
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
 	std::unordered_map<std::type_index, std::unique_ptr<FSteeringBehaviorBase_RuniskovsDan>> BehaviorMap{};
-	FSteeringBehaviorBase_RuniskovsDan* CurrentBehavior;
+	FSteeringBehaviorBase_RuniskovsDan* CurrentBehavior; // Non owning
 	
 	UPROPERTY(VisibleAnywhere)
 	float AngularVelocity;

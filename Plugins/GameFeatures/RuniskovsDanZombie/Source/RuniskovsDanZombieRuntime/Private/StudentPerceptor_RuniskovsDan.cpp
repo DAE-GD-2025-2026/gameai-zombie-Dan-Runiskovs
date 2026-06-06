@@ -140,7 +140,7 @@ UHouseTrackerComponent_RuniskovsDan* UStudentPerceptor_RuniskovsDan::GetHouseTra
 
 bool UStudentPerceptor_RuniskovsDan::ProcessHouseStimulus(AActor* PotentialHouse)
 {
-	AHouse* House{ Cast<AHouse>(PotentialHouse) };
+	auto* House{ Cast<AHouse>(PotentialHouse) };
 	if (!House) return false;
 
 	const auto* Tracker{ GetHouseTracker() };
@@ -148,23 +148,16 @@ bool UStudentPerceptor_RuniskovsDan::ProcessHouseStimulus(AActor* PotentialHouse
 
 	if (!BlackboardComponent) return false;
 
-	if (Tracker->IsHouseVisited(*House))
+	// --- Skip if this one has been visited ---
+	if (Tracker->IsHouseVisited(*House)) return true;
+	
+	if (auto* CurrentHouse{ Cast<AHouse>(BlackboardComponent->GetValueAsObject(HouseKeyName)) })
 	{
-		return true;
-	}
+		// --- Get both distances ---
+		const auto NewHouseDistance{ GetOwner()->GetDistanceTo(House) };
+		const auto CurrentHouseDistance{ GetOwner()->GetDistanceTo(CurrentHouse) };
 
-	if (AHouse* CurrentHouse{
-		Cast<AHouse>(BlackboardComponent->GetValueAsObject(HouseKeyName))
-	})
-	{
-		const float NewHouseDistance{
-			GetOwner()->GetDistanceTo(House)
-		};
-
-		const float CurrentHouseDistance{
-			GetOwner()->GetDistanceTo(CurrentHouse)
-		};
-
+		// --- Is this one closer ? ---
 		House =
 			NewHouseDistance < CurrentHouseDistance
 			? House
@@ -172,13 +165,12 @@ bool UStudentPerceptor_RuniskovsDan::ProcessHouseStimulus(AActor* PotentialHouse
 	}
 
 	BlackboardComponent->SetValueAsObject(HouseKeyName, House);
-
 	return true;
 }
 
 bool UStudentPerceptor_RuniskovsDan::ProcessItemStimulus(AActor* PotentialItem) const
 {
-	if (ABaseItem* Item{ Cast<ABaseItem>(PotentialItem) }; Item)
+	if (auto* Item{ Cast<ABaseItem>(PotentialItem) }; Item)
 	{
 		// --- Check the priority of queued item---
 		if (auto* CurrentItem{ (Cast<ABaseItem>(BlackboardComponent->GetValueAsObject(ItemKeyName))) })

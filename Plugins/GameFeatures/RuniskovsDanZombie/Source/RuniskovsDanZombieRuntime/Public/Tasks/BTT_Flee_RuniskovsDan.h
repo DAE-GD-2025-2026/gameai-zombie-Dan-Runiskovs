@@ -22,13 +22,13 @@ public:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 	
 private:
-	ASurvivorPawn* m_pSurvivor{};
-	UBlackboardComponent* m_Blackboard{};
+	ASurvivorPawn* Survivalist{};
+	UBlackboardComponent* Blackboard{};
 	
 	UPROPERTY(EditAnywhere)
-	FBlackboardKeySelector m_TargetPoint;
+	FBlackboardKeySelector TargetPoint;
 
-	FVector m_TargetPos;
+	FVector TargetPosition;
 	
-	USteeringComponent_RuniskovsDan* m_pSteeringComponent{};
+	USteeringComponent_RuniskovsDan* SteeringComponent{};
 };

@@ -2,7 +2,7 @@
 
 
 #include "Tasks/BTT_TryEat_RuniskovsDan.h"
-#include "Utils_RuniskovsDan.h"
+#include "Tasks/Utils_RuniskovsDan.h"
 #include "Survivor/SurvivorPawn.h"
 #include "Common/StaminaComponent.h"
 #include "Components/InventoryManager_RuniskovsDan.h"
@@ -14,11 +14,12 @@ EBTNodeResult::Type UBTT_TryEat_RuniskovsDan::ExecuteTask(UBehaviorTreeComponent
 	const auto* StaminaComponent{ SurvivorPawn->GetComponentByClass<UStaminaComponent>() };
 	auto* InventoryManager{ SurvivorPawn->GetComponentByClass<UInventoryManager_RuniskovsDan>() };
 
-	for (const auto FoodItems{ InventoryManager->GetItemsByType<AFood>() }; auto* Item : FoodItems)
+	for (const auto FoodItems{ InventoryManager->TryGetItemsByType<AFood>() }; 
+		auto* Item : FoodItems)
 	{
 		const auto FoodValue{ Item->GetValue() };
-		const auto StaminaDiff{ StaminaComponent->GetMaxStamina() - StaminaComponent->GetCurrentStamina() };
-		if (FoodValue <= StaminaDiff)
+		if (const auto StaminaDiff{ StaminaComponent->GetMaxStamina() - StaminaComponent->GetCurrentStamina() };
+			FoodValue <= StaminaDiff)
 		{
 			Item->UseItem(*SurvivorPawn);
 			InventoryManager->CleanUp();

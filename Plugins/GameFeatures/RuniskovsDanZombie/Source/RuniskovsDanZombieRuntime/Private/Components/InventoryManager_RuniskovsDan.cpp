@@ -4,9 +4,12 @@
 #include "Components/InventoryManager_RuniskovsDan.h"
 #include "Items/Weapon.h"
 
-UInventoryManager_RuniskovsDan::UInventoryManager_RuniskovsDan()
+void UInventoryManager_RuniskovsDan::BeginPlay()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	Super::BeginPlay();
+	
+	InventoryComponent = GetOwner()->FindComponentByClass<UInventoryComponent>();
+	verify(InventoryComponent);
 }
 
 bool UInventoryManager_RuniskovsDan::TryTake(ABaseItem& Item)
@@ -34,11 +37,10 @@ void UInventoryManager_RuniskovsDan::CleanUp() noexcept
 
 	const auto& Inventory{ InventoryComponent->GetInventory() };
 
-	// --- Reverse order to avoid Index Shift
-	for (int32 SlotIdx{ Inventory.Num() - 1 }; SlotIdx >= 0; --SlotIdx)
+	// --- Reverse order to avoid Index Shift ---
+	for (int SlotIdx{ Inventory.Num() - 1 }; SlotIdx >= 0; --SlotIdx)
 	{
-		if (ABaseItem* Item{ Inventory[SlotIdx] };
-			Item && Item->GetValue() == 0)
+		if (const auto* Item{ Inventory[SlotIdx] }; Item && Item->GetValue() == 0)
 		{
 			InventoryComponent->RemoveItem(SlotIdx);
 			if (ItemCount > 0) --ItemCount;
@@ -46,11 +48,4 @@ void UInventoryManager_RuniskovsDan::CleanUp() noexcept
 	}
 }
 
-void UInventoryManager_RuniskovsDan::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	InventoryComponent = GetOwner()->FindComponentByClass<UInventoryComponent>();
-	verify(InventoryComponent);
-}
 

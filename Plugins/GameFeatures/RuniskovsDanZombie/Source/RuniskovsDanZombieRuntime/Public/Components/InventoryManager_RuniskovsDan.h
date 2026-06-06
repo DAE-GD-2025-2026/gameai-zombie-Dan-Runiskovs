@@ -13,15 +13,13 @@ class RUNISKOVSDANZOMBIERUNTIME_API UInventoryManager_RuniskovsDan : public UAct
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
-	UInventoryManager_RuniskovsDan();
+	UInventoryManager_RuniskovsDan() { PrimaryComponentTick.bCanEverTick = false; }
 	
-	// Returns whether an item was successfully taken
 	bool TryTake(ABaseItem& Item);
 	void CleanUp() noexcept;
 
 	template <typename T> requires std::derived_from<T, ABaseItem>
-	TArray<T*> GetItemsByType() const noexcept
+	TArray<T*> TryGetItemsByType() const noexcept
 	{
 		TArray Inventory{ InventoryComponent->GetInventory() };
 		

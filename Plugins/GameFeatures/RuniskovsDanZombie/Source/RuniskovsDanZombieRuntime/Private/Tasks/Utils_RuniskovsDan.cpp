@@ -11,24 +11,24 @@ namespace MyBTTUtils_RuniskovsDan
 {
 	ASurvivorPawn* GetSurvivorPawn(const UBehaviorTreeComponent& OwnerComp) noexcept
 	{
-		auto* const controller = OwnerComp.GetAIOwner();
-		check(controller);
+		const auto* Controller = OwnerComp.GetAIOwner();
+		check(Controller);
 		
-		auto* const survivorPawn = Cast<ASurvivorPawn>(controller->GetPawn());
-		check(survivorPawn);
+		auto* SurvivorPawn = Cast<ASurvivorPawn>(Controller->GetPawn());
+		check(SurvivorPawn);
 		
-		return survivorPawn;
+		return SurvivorPawn;
 	}
 
 	FVector2D GetSurvivalistLocation(const USteeringComponent_RuniskovsDan& SteeringComp) noexcept
 	{
-		auto* Survivalist{ SteeringComp.GetOwner() };
+		const auto* Survivalist{ SteeringComp.GetOwner() };
 		verify(Survivalist);
 		const FVector2D Position{ Survivalist->GetActorLocation().X, Survivalist->GetActorLocation().Y };
 		return Position;
 	}
 
-	FBox GetHouseBounds(AHouse* House) noexcept
+	FBox GetHouseBounds(const AHouse* House) noexcept
 	{
 		// --- House comes in here Pre-verified ---
 		FVector HouseOrigin, HouseExtent;
@@ -39,7 +39,7 @@ namespace MyBTTUtils_RuniskovsDan
 		return HouseBounds;
 	}
 
-	bool IsPointInHouse(FVector2D Location, const FHouseBounds& Bounds) noexcept
+	bool IsPointInHouse(const FVector2D Location, const FHouseBounds& Bounds) noexcept
 	{
 		return	FMath::Abs(Location.X - Bounds.Origin.X) <= Bounds.Extent.X &&
 				FMath::Abs(Location.Y - Bounds.Origin.Y) <= Bounds.Extent.Y;
@@ -54,7 +54,7 @@ namespace MyBTTUtils_RuniskovsDan
 
 	TArray<ABaseItem*> GetInventory(const ASurvivorPawn& Survivalist) noexcept
 	{
-		auto* InventoryComponent{ Survivalist.FindComponentByClass<UInventoryComponent>() };
+		const auto* InventoryComponent{ Survivalist.FindComponentByClass<UInventoryComponent>() };
 		verify(InventoryComponent);
 		
 		return InventoryComponent->GetInventory();

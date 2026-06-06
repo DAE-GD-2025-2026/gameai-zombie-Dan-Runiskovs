@@ -43,7 +43,7 @@ EBTNodeResult::Type UBTT_TryShoot_RuniskovsDan::ExecuteTask(UBehaviorTreeCompone
 	
 	Shoot();
 	
-	UBlackboardComponent& BlackboardComponent{ MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp) };
+	auto& BlackboardComponent{ MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp) };
 	BlackboardComponent.SetValueAsObject(ZombieKey.SelectedKeyName, nullptr);
 	
 	Inventory->CleanUp();
@@ -55,7 +55,9 @@ bool UBTT_TryShoot_RuniskovsDan::TryGetAnyGun()
 {
 	Shotgun = nullptr;
 	Pistol = nullptr;
-	for (const auto Items{ MyBTTUtils_RuniskovsDan::GetInventory(*Survivalist) }; auto* Item : Items)
+	
+	for (const auto Items{ MyBTTUtils_RuniskovsDan::GetInventory(*Survivalist) }; 
+		auto* Item : Items)
 	{
 		if (Shotgun == nullptr)
 		{
@@ -80,9 +82,9 @@ void UBTT_TryShoot_RuniskovsDan::GetWeapon(UBehaviorTreeComponent& OwnerComp) no
 
 	constexpr auto MaxShotgunDistance{ 100.f }; // Up close and personal
 	constexpr auto ShotgunDstSq{MaxShotgunDistance * MaxShotgunDistance};
-	const auto DstToZombieSq{DirToZombie.SquaredLength()};
-	
-	if (Shotgun and (DstToZombieSq <= ShotgunDstSq))
+
+	if (const auto DstToZombieSq{DirToZombie.SquaredLength()}; 
+		Shotgun and (DstToZombieSq <= ShotgunDstSq))
 	{
 		CurrentGun = Shotgun;
 	}

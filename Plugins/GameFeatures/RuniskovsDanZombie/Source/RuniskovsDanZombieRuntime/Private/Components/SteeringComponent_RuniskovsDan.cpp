@@ -25,6 +25,7 @@ void USteeringComponent_RuniskovsDan::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// --- No utils here, coz no OwnerComp yet, gotta put in some elbow grease ---
 	Survivalist = CastChecked<ASurvivorPawn>(GetOwner());
 }
 
@@ -34,18 +35,20 @@ void USteeringComponent_RuniskovsDan::TickComponent(float DeltaTime, ELevelTick 
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	const auto linearVelocity = CurrentBehavior->CalculateSteering(DeltaTime, *this);
-	FVector velocity{ linearVelocity.LinearVelocity.X, linearVelocity.LinearVelocity.Y, 0};
+	// --- Calculate steering ---
+	const auto Steering{ CurrentBehavior->CalculateSteering(DeltaTime, *this) };
+	const FVector Velocity{ Steering.LinearVelocity.X, Steering.LinearVelocity.Y, 0};
 	
-	Survivalist->AddMovementInput(velocity);
+	Survivalist->AddMovementInput(Velocity);
 	
-	const FVector moveDir{ velocity };
-	Survivalist->SetActorRotation(moveDir.Rotation());
+	// --- Rotate him as well ---
+	const FVector MoveDir{ Velocity };
+	Survivalist->SetActorRotation(MoveDir.Rotation());
 }
 
 void USteeringComponent_RuniskovsDan::SetTarget(const FVector& Target) const
 {
-	FVector2D Target2D{ Target.X, Target.Y };
+	const FVector2D Target2D{ Target.X, Target.Y };
 	CurrentBehavior->SetTarget(Target2D);
 }
 
@@ -58,11 +61,11 @@ void USteeringComponent_RuniskovsDan::FaceTarget() const
 {
 	const auto Target{ CurrentBehavior->GetTarget() };
     
-	// Get current positions
+	// --- Calculate From and To ---
 	const auto CurrentLocation{ Survivalist->GetActorLocation()};
 	const FVector TargetLocation{ Target.X, Target.Y, CurrentLocation.Z };
     
-	// Calculate rotation to look at target
+	// --- Calculate Rotation ---
 	const FRotator NewRotation{ (TargetLocation - CurrentLocation).Rotation() };
     
 	Survivalist->SetActorRotation(NewRotation);
