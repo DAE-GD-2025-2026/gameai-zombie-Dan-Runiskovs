@@ -19,5 +19,5 @@ bool UBTD_NeedsStamina_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeCom
 		StaminaComponent->GetCurrentStamina() /
 		StaminaComponent->GetMaxStamina();
 
-	return StaminaPercent < 0.3f;
+	return StaminaPercent <= 0.5f;
 }

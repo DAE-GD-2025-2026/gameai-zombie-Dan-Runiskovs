@@ -54,7 +54,7 @@ void UBTT_LookAround_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, u
 		Blackboard.SetValueAsBool(ShouldLookAroundKey.SelectedKeyName, false);
 		
 		// --- If inside the house -> mark it ---
-		HouseTracker->MarkCurrentHouse();
+		//HouseTracker->MarkCurrentHouse();
 
 		auto& BlackboardComponent{ MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp) };
 		BlackboardComponent.SetValueAsObject(TEXT("House"), nullptr);

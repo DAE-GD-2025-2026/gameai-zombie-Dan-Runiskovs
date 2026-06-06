@@ -18,5 +18,5 @@ bool UBTD_NeedsHealing_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeCom
 		HealthComponent->GetHealth() /
 		HealthComponent->GetMaxHealth();
 
-	return HealthPercent < 0.5f;
+	return HealthPercent <= 0.5f;
 }

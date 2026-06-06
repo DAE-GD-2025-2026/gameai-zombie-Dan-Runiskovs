@@ -80,12 +80,15 @@ void UBTT_EnterHouse_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, u
 	
 	if (Memory->CurrentPointIdx >= static_cast<uint32_t>(Memory->Path.Num()))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ENTER HOUSE SUCCEEDED"));
-		
-		auto& Blackboard = MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp);
+		if (HouseTracker && House)
+		{
+			HouseTracker->SetHouseVisited(*House);
+		}
 
-		Blackboard.SetValueAsBool(ShouldLookAroundKey.SelectedKeyName,true);
-		
+		auto& Blackboard = MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp);
+		Blackboard.SetValueAsObject(HouseKey.SelectedKeyName, nullptr);
+		Blackboard.SetValueAsBool(ShouldLookAroundKey.SelectedKeyName, true);
+
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
