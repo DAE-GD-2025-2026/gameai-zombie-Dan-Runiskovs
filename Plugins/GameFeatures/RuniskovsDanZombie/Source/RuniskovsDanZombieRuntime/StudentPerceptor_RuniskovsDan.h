@@ -3,12 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BehaviorTree/BehaviorTreeTypes.h"
 #include "Components/ActorComponent.h"
-#include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
-#include "Perception/AISenseConfig_Damage.h"
-#include "Perception/AISense_Damage.h"
 #include "StudentPerceptor_RuniskovsDan.generated.h"
+
+class ABaseItem;
+class AActor;
+class UHealthComponent;
+class UHouseTrackerComponent_RuniskovsDan;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class RUNISKOVSDANZOMBIERUNTIME_API UStudentPerceptor_RuniskovsDan : public UActorComponent
@@ -17,10 +20,36 @@ class RUNISKOVSDANZOMBIERUNTIME_API UStudentPerceptor_RuniskovsDan : public UAct
 
 public:
 	// Sets default values for this component's properties
-	UStudentPerceptor_RuniskovsDan();
+	UStudentPerceptor_RuniskovsDan() { PrimaryComponentTick.bCanEverTick = true; }
 	
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditAnywhere, Category = "Perception")
+	FName HouseKeyName{ "House" };
+	
+	UPROPERTY(EditAnywhere, Category = "Perception")
+	FName ItemKeyName{ "Item" };
+
+	UPROPERTY(EditAnywhere, Category = "Perception")
+	FBlackboardKeySelector ZombieKey;
+	FName ZombieKeyName{ "Zombie" };
 
 	UFUNCTION()
-	virtual void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+	virtual void OnPerceptionUpdated(AActor* Actor, const FAIStimulus Stimulus);
+	
+private:
+	int OldHealth{};
+	
+	UPROPERTY()
+	UBlackboardComponent* BlackboardComponent{};
+
+	UHealthComponent* HealthComponent{};
+	UHouseTrackerComponent_RuniskovsDan* HouseTrackerComponent{};
+
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;	
+	
+	// --- Helpers ---
+	static uint8_t GetPriority(const ABaseItem& Item) noexcept;
+	bool ProcessHouseStimulus(AActor* PotentialHouse) const;
+	bool ProcessItemStimulus(AActor* PotentialItem) const;
 };
