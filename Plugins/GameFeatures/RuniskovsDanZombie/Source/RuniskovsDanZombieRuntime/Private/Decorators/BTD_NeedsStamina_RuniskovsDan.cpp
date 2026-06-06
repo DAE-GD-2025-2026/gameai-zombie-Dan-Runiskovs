@@ -15,5 +15,9 @@ bool UBTD_NeedsStamina_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeCom
 	const auto* StaminaComponent{ Survivalist->GetComponentByClass<UStaminaComponent>() };
 	verify(StaminaComponent);
 	
-	return StaminaComponent->GetCurrentStamina() < StaminaComponent->GetMaxStamina();
+	const float StaminaPercent =
+		StaminaComponent->GetCurrentStamina() /
+		StaminaComponent->GetMaxStamina();
+
+	return StaminaPercent < 0.3f;
 }

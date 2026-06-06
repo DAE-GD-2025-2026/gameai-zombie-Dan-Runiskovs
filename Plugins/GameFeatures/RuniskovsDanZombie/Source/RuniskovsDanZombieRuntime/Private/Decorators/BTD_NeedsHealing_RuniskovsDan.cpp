@@ -13,6 +13,10 @@ bool UBTD_NeedsHealing_RuniskovsDan::CalculateRawConditionValue(UBehaviorTreeCom
 	
 	const auto* HealthComponent{ Survivalist->GetComponentByClass<UHealthComponent>() };
 	verify(HealthComponent);
+	
+	const float HealthPercent =
+		HealthComponent->GetHealth() /
+		HealthComponent->GetMaxHealth();
 
-	return HealthComponent->GetHealth() < HealthComponent->GetMaxHealth();
+	return HealthPercent < 0.5f;
 }

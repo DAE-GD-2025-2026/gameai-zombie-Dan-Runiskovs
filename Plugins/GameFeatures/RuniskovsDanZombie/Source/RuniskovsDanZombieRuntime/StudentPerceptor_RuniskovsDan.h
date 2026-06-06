@@ -50,6 +50,7 @@ private:
 	
 	// --- Helpers ---
 	static uint8_t GetPriority(const ABaseItem& Item) noexcept;
-	bool ProcessHouseStimulus(AActor* PotentialHouse) const;
+	UHouseTrackerComponent_RuniskovsDan* GetHouseTracker() noexcept;
+	bool ProcessHouseStimulus(AActor* PotentialHouse);
 	bool ProcessItemStimulus(AActor* PotentialItem) const;
 };

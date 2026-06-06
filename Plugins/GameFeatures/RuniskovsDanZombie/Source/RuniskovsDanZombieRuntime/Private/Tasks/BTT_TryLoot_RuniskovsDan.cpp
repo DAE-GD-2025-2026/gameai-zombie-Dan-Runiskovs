@@ -20,13 +20,15 @@ EBTNodeResult::Type UBTT_TryLoot_RuniskovsDan::ExecuteTask(UBehaviorTreeComponen
 		return EBTNodeResult::Failed;
 	}
 	
+	// --- Make Survivalist Seek ---
+	Survivalist = MyBTTUtils_RuniskovsDan::GetSurvivorPawn(OwnerComp);
+	verify(Survivalist);
+	
 	// --- Get Inventory ---
 	Inventory = Survivalist->FindComponentByClass<UInventoryManager_RuniskovsDan>();
 	verify(Inventory);
 
-	// --- Make Survivalist Seek ---
-	Survivalist = MyBTTUtils_RuniskovsDan::GetSurvivorPawn(OwnerComp);
-	verify(Survivalist);
+	// --- Get Steering ---
 	Steering = Survivalist->GetComponentByClass<USteeringComponent_RuniskovsDan>();
 	verify(Steering);
 	

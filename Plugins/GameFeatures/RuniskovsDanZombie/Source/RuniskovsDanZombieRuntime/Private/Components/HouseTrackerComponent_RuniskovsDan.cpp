@@ -13,9 +13,8 @@ UHouseTrackerComponent_RuniskovsDan::UHouseTrackerComponent_RuniskovsDan()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// No houses visited -> nullptr
-	ArrVisitedHouses.Reserve(MaxVisited);
-	std::fill(ArrVisitedHouses.begin(), ArrVisitedHouses.end(), nullptr);
+	// --- Nothing yet visited ---
+	ArrVisitedHouses.Init(nullptr, MaxVisited);
 }
 
 

@@ -29,24 +29,24 @@ void UStudentPerceptor_RuniskovsDan::BeginPlay()
 	if (auto* Controller{ Cast<AAIController>(GetOwner()->GetInstigatorController()) })
 	{
 		BlackboardComponent = Controller->GetBlackboardComponent();
+		verify(BlackboardComponent);
 	}
 
 	// --- Loop over the houses, make them visible to the player ---
 	for (const auto* House : TActorRange<AHouse>(GetWorld()))
 	{
-		auto* Source{ House->GetComponentByClass<UAIPerceptionStimuliSourceComponent>() };
-		
-		// --- Only gonna use sight for houses ---
-		Source->RegisterForSense(TSubclassOf<UAISense_Sight>());
-		Source->RegisterWithPerceptionSystem();
+		if (auto* Source{ House->GetComponentByClass<UAIPerceptionStimuliSourceComponent>() })
+		{
+			Source->RegisterForSense(UAISense_Sight::StaticClass());
+			Source->RegisterWithPerceptionSystem();
+		}
 	}
 
 	// --- Save Initial health ---
 	HealthComponent = GetOwner()->FindComponentByClass<UHealthComponent>();
+	verify(HealthComponent);
+	
 	OldHealth = HealthComponent->GetHealth();
-
-	// --- Registering house tracker component ---
-	HouseTrackerComponent = GetOwner()->FindComponentByClass<UHouseTrackerComponent_RuniskovsDan>();
 }
 
 void UStudentPerceptor_RuniskovsDan::OnPerceptionUpdated(AActor* Actor, const FAIStimulus Stimulus)
@@ -128,27 +128,52 @@ uint8_t UStudentPerceptor_RuniskovsDan::GetPriority(const ABaseItem& Item) noexc
 	}
 }
 
-bool UStudentPerceptor_RuniskovsDan::ProcessHouseStimulus(AActor* PotentialHouse) const
+UHouseTrackerComponent_RuniskovsDan* UStudentPerceptor_RuniskovsDan::GetHouseTracker() noexcept
 {
-	if (AHouse* House{ Cast<AHouse>(PotentialHouse) }; House)
+	if (!HouseTrackerComponent)
 	{
-		// --- Already Visited? ---
-		if (HouseTrackerComponent->IsHouseVisited(*House)) return true;
+		HouseTrackerComponent = GetOwner()->FindComponentByClass<UHouseTrackerComponent_RuniskovsDan>();
+	}
 
-		// --- Check if this one is closer ---
-		if (auto* CurrentHouse{ (Cast<AHouse>(BlackboardComponent->GetValueAsObject(HouseKeyName))) })
-		{
-			House = 
-				(PotentialHouse->GetDistanceTo(CurrentHouse) < PotentialHouse->GetDistanceTo(House)) 
-				? CurrentHouse 
-				: House;
-		}
+	return HouseTrackerComponent;
+}
 
-		// --- Save it ---
-		BlackboardComponent->SetValueAsObject(HouseKeyName, House);
+bool UStudentPerceptor_RuniskovsDan::ProcessHouseStimulus(AActor* PotentialHouse)
+{
+	AHouse* House{ Cast<AHouse>(PotentialHouse) };
+	if (!House) return false;
+
+	const auto* Tracker{ GetHouseTracker() };
+	if (!Tracker) return false;
+
+	if (!BlackboardComponent) return false;
+
+	if (Tracker->IsHouseVisited(*House))
+	{
 		return true;
 	}
-	return false;
+
+	if (AHouse* CurrentHouse{
+		Cast<AHouse>(BlackboardComponent->GetValueAsObject(HouseKeyName))
+	})
+	{
+		const float NewHouseDistance{
+			GetOwner()->GetDistanceTo(House)
+		};
+
+		const float CurrentHouseDistance{
+			GetOwner()->GetDistanceTo(CurrentHouse)
+		};
+
+		House =
+			NewHouseDistance < CurrentHouseDistance
+			? House
+			: CurrentHouse;
+	}
+
+	BlackboardComponent->SetValueAsObject(HouseKeyName, House);
+
+	return true;
 }
 
 bool UStudentPerceptor_RuniskovsDan::ProcessItemStimulus(AActor* PotentialItem) const
