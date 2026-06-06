@@ -20,9 +20,8 @@ public:
 	bool TryTake(ABaseItem& Item);
 	void CleanUp() noexcept;
 
-
 	template <typename T> requires std::derived_from<T, ABaseItem>
-	TArray<T*> GetItemsByType() noexcept
+	TArray<T*> GetItemsByType() const noexcept
 	{
 		TArray Inventory{ InventoryComponent->GetInventory() };
 		

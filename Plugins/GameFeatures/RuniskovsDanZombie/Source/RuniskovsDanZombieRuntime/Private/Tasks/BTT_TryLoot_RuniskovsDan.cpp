@@ -34,10 +34,6 @@ EBTNodeResult::Type UBTT_TryLoot_RuniskovsDan::ExecuteTask(UBehaviorTreeComponen
 	
 	Steering->SetBehavior<FSeek_RuniskovsDan>();
 	
-	// --- Request Looking around ---
-	auto& Blackboard{ MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp) };
-	Blackboard.SetValueAsBool(ShouldLookAroundKey.SelectedKeyName, true);
-	
 	return EBTNodeResult::InProgress;
 }
 
@@ -70,6 +66,11 @@ void UBTT_TryLoot_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, uint
 		}
 		
 		ItemsToLoot.Pop();
+		
+		auto& Blackboard = MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp);
+
+		Blackboard.SetValueAsBool(ShouldLookAroundKey.SelectedKeyName,true);
+		
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 	else

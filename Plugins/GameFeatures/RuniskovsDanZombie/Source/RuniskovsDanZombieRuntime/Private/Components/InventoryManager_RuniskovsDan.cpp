@@ -40,6 +40,7 @@ void UInventoryManager_RuniskovsDan::CleanUp() noexcept
 		if (ABaseItem* Item{ Inventory[SlotIdx] };
 			Item && Item->GetValue() == 0)
 		{
+			InventoryComponent->RemoveItem(SlotIdx);
 			if (ItemCount > 0) --ItemCount;
 		}
 	}

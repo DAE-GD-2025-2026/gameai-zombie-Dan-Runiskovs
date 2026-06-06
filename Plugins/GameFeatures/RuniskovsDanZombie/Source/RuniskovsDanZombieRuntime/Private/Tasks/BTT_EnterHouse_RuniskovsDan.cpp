@@ -18,6 +18,7 @@ struct FNodeMemory final
 
 EBTNodeResult::Type UBTT_EnterHouse_RuniskovsDan::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ENTER HOUSE TASK STARTED"));
 	// --- Get Survivalist ---
 	Survivalist = MyBTTUtils_RuniskovsDan::GetSurvivorPawn(OwnerComp);
 	
@@ -35,10 +36,6 @@ EBTNodeResult::Type UBTT_EnterHouse_RuniskovsDan::ExecuteTask(UBehaviorTreeCompo
 	HouseTracker = Survivalist->GetComponentByClass<UHouseTrackerComponent_RuniskovsDan>();
 	verify(HouseTracker);
 	if (HouseTracker->IsHouseVisited(*House)) return EBTNodeResult::Failed;
-	
-	// --- Look Around when in ---
-	auto& Blackboard{ MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp) };
-	Blackboard.SetValueAsBool(ShouldLookAroundKey.SelectedKeyName, true);
 	
 	// --- Go in the house ---
 	auto* SteeringComponent{ Survivalist->GetComponentByClass<USteeringComponent_RuniskovsDan>() };
@@ -72,6 +69,8 @@ EBTNodeResult::Type UBTT_EnterHouse_RuniskovsDan::ExecuteTask(UBehaviorTreeCompo
 
 void UBTT_EnterHouse_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ENTER HOUSE TICK"));
+	
 	// Finishing if the entire path was consumed
 	auto* Memory = reinterpret_cast<FNodeMemory*>(NodeMemory);
 	UE_LOG(LogTemp, Warning,
@@ -81,8 +80,11 @@ void UBTT_EnterHouse_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, u
 	
 	if (Memory->CurrentPointIdx >= static_cast<uint32_t>(Memory->Path.Num()))
 	{
-		UE_LOG(LogTemp, Warning,
-			TEXT("Finished EnterHouse"));
+		UE_LOG(LogTemp, Warning, TEXT("ENTER HOUSE SUCCEEDED"));
+		
+		auto& Blackboard = MyBTTUtils_RuniskovsDan::GetBlackboard(OwnerComp);
+
+		Blackboard.SetValueAsBool(ShouldLookAroundKey.SelectedKeyName,true);
 		
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
@@ -117,6 +119,8 @@ void UBTT_EnterHouse_RuniskovsDan::TickTask(UBehaviorTreeComponent& OwnerComp, u
 
 EBTNodeResult::Type UBTT_EnterHouse_RuniskovsDan::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	UE_LOG(LogTemp, Error, TEXT("ENTER HOUSE ABORTED"));
+	
 	Survivalist->GetMovementComponent()->StopMovementImmediately();
 	return EBTNodeResult::Aborted;
 }
