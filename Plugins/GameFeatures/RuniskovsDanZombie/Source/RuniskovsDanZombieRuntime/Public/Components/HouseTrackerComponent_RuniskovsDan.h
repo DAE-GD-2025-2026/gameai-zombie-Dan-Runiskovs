@@ -28,7 +28,7 @@ public:
 	TArray<AHouse*> ArrHouses;	// All houses
 	
 	TArray<AHouse*> ArrVisitedHouses{};
-	static constexpr uint8_t MaxVisited{6};
+	static constexpr uint8_t MaxVisited{3u};
 	uint8_t OldestHouseIdx{};
 
 	void CollectHouses() noexcept;
