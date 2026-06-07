@@ -17,7 +17,7 @@ bool UInventoryManager_RuniskovsDan::TryTake(ABaseItem& Item)
 	// --- Full Inventory check ---
 	if (IsFull()) return false;
 	
-	// --- Already has this item ---
+	// --- Already has THE SAME item ---
 	if (InventoryComponent->GetInventory().Contains(&Item)) return false;
 	
 	uint8_t SlotIdx{};
